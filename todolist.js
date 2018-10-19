@@ -3,17 +3,28 @@ Vue.component("todolist", {
   template:
   `<div>
     <ul>
-      <todolist-item v-for="(item, i) in todolist" :item="item"></todolist-item>
+      <todolist-item @complete="complete(i)" v-for="(item, i) in todolist" :item="item"></todolist-item>
     </ul>
   <div>`,
-  props: ["todolist"]
+  props: ["todolist"],
+  methods: {
+    complete: function(i) {
+      server.emit("complete", i);
+    }
+  }
 });
 
 // Todolist item component with props passed
 Vue.component("todolist-item", {
   template:
-  `<li>
+`  <li>
     <p>{{ item.title }}</p>
+    <input @click='requestComplete' type='checkbox' v-model='item.completed'>
   </li>`,
-  props: ["item"]
+  props: ["item"],
+  methods: {
+    requestComplete: function() {
+      this.$emit("complete");
+    }
+  }
 });

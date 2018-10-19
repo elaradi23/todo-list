@@ -32,6 +32,12 @@ server.on("connection", client => {
     addTodo(t);
   });
 
+  // Sets a todo to be completed
+  client.on("complete", i => {
+    DB[i].completed = true;
+    server.emit("complete", i);
+  });
+
   // Send the DB downstream on connect
   reloadTodos();
 });

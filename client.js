@@ -42,3 +42,8 @@ server.on("load", todos => {
 server.on("newTodo", todo => {
   this.vm.todolist.push(todo);
 });
+
+// This event is for updating a todo when completed
+server.on("complete", i => {
+  this.vm.todolist[i].completed = true;
+});

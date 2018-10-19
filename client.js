@@ -53,3 +53,10 @@ server.on("delete", i => {
   console.log('server delete ' + i)
   this.vm.todolist.splice(i, 1);
 });
+
+// This event assigns all todos as completed
+server.on("completeAll", () => {
+  this.vm.todolist.forEach(function(todo) {
+    todo.completed = true;
+  });
+});

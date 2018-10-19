@@ -44,6 +44,13 @@ server.on("connection", client => {
     server.emit("delete", i);
   });
 
+  client.on("completeAll", () => {
+    DB.forEach(function(todo) {
+      todo.completed = true;
+    });
+    server.emit("completeAll");
+  });
+
   // Send the DB downstream on connect
   reloadTodos();
 });

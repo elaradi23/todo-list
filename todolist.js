@@ -5,6 +5,7 @@ Vue.component("todolist", {
     <ul>
       <todolist-item @remove="remove(i)" @complete="complete(i)" v-for="(item, i) in todolist" :item="item"></todolist-item>
     </ul>
+    <button v-on:click="completeAll">Complete All Todos</button>\
   <div>`,
   props: ["todolist"],
   methods: {
@@ -13,6 +14,9 @@ Vue.component("todolist", {
     },
     remove: function(i) {
       server.emit("delete", i);
+    },
+    completeAll: function() {
+      server.emit("completeAll");
     }
   }
 });

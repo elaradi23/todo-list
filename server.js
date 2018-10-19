@@ -12,7 +12,7 @@ const DB = firstTodos.map(t => {
 server.on("connection", client => {
   // Sends a message to the client to reload all todos
   const reloadTodos = () => {
-    server.emit("load", DB);
+    client.emit("load", DB);
   };
 
   // Sends a message to client(s) of new added todo

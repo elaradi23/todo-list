@@ -18,7 +18,8 @@ function add() {
   if (input.value) {
     // Emit the new todo as some data to the server
     server.emit("make", {
-      title: input.value
+      title: input.value,
+      completed: false
     });
 
     // Clear the input
@@ -50,7 +51,6 @@ server.on("complete", i => {
 
 // This event is for deleting a todo item
 server.on("delete", i => {
-  console.log("server delete " + i);
   this.vm.todolist.splice(i, 1);
 });
 

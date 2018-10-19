@@ -14,7 +14,7 @@ function add() {
 
   // Clear the input
   input.value = "";
-  // TODO: refocus the element
+  // refocus the element
   input.focus();
 }
 
@@ -30,4 +30,8 @@ function render(todo) {
 // This event is for (re)loading the entire list of todos from the server
 server.on("load", todos => {
   todos.forEach(todo => render(todo));
+});
+
+server.on("newTodo", todo => {
+  render(todo);
 });

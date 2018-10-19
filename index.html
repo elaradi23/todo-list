@@ -4,11 +4,17 @@
         <meta charset="utf-8">
         <title>TODO</title>
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script src="todolist.js" async></script>
     </head>
     <body>
         <input id="todo-input" type="text" placeholder="Feed the cat" autofocus>
         <button type="button" onclick="add()">Make</button>
-        <ul id="todo-list"></ul>
+        <!-- vue instance -->
+        <div id="app">
+          <!-- todolist vue component -->
+          <todolist :todolist="todolist"></todolist>
+        </div>
     </body>
     <script src="client.js" async></script>
 </html>

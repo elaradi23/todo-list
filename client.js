@@ -1,5 +1,12 @@
 const server = io("http://localhost:3003/");
-const list = document.getElementById("todo-list");
+
+// Vue instance
+var vm = new Vue({
+  el: "#app",
+  data: {
+    todolist: []
+  }
+});
 
 // NOTE: These are all our globally scoped functions for interacting with the server
 // This function adds a new todo from the input
@@ -22,24 +29,16 @@ function add() {
   input.focus();
 }
 
-function render(todo) {
-  console.log(todo);
-  const listItem = document.createElement("li");
-  const listItemText = document.createTextNode(todo.title);
-  listItem.appendChild(listItemText);
-  list.append(listItem);
-}
-
 // NOTE: These are listeners for events from the server
 // This event is for (re)loading the entire list of todos from the server
 server.on("load", todos => {
   // Ensures reset of todo list on client connections already viewing the app
   // instead of appending the rendred todos to existing todos on the app page
-  list.innerHTML = "";
-  todos.forEach(todo => render(todo));
+  this.vm.todolist = [];
+  todos.forEach(todo => this.vm.todolist.push(todo));
 });
 
 // This event is for loading the lastest todo item to todos list
 server.on("newTodo", todo => {
-  render(todo);
+  this.vm.todolist.push(todo);
 });

@@ -23,7 +23,7 @@ server.on("connection", client => {
   // Accepts when a client makes a new todo
   client.on("make", t => {
     // Make a new todo
-    const newTodo = new Todo((title = t.title));
+    const newTodo = new Todo(t.title);
 
     // Push this newly created todo to our database
     DB.push(newTodo);
@@ -44,11 +44,18 @@ server.on("connection", client => {
     server.emit("delete", i);
   });
 
+  // Sets all todos to completed
   client.on("completeAll", () => {
     DB.forEach(function(todo) {
       todo.completed = true;
     });
     server.emit("completeAll");
+  });
+
+  // Deletes all todo items
+  client.on("deleteAll", () => {
+    DB.length = 0;
+    server.emit("deleteAll");
   });
 
   // Send the DB downstream on connect

@@ -50,7 +50,7 @@ server.on("complete", i => {
 
 // This event is for deleting a todo item
 server.on("delete", i => {
-  console.log('server delete ' + i)
+  console.log("server delete " + i);
   this.vm.todolist.splice(i, 1);
 });
 
@@ -59,4 +59,9 @@ server.on("completeAll", () => {
   this.vm.todolist.forEach(function(todo) {
     todo.completed = true;
   });
+});
+
+// This event deletes all todos
+server.on("deleteAll", () => {
+  this.vm.todolist = [];
 });

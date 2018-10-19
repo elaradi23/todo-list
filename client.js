@@ -14,7 +14,7 @@ function add() {
 
   // Clear the input
   input.value = "";
-  // refocus the element
+  // Refocus the element
   input.focus();
 }
 
@@ -29,9 +29,13 @@ function render(todo) {
 // NOTE: These are listeners for events from the server
 // This event is for (re)loading the entire list of todos from the server
 server.on("load", todos => {
+  // Ensures reset of todo list on client connections already viewing the app
+  // instead of appending the rendred todos to existing todos on the app page
+  list.innerHTML = "";
   todos.forEach(todo => render(todo));
 });
 
+// This event is for loading the lastest todo item to todos list
 server.on("newTodo", todo => {
   render(todo);
 });

@@ -6,7 +6,7 @@ const Todo = require("./todo");
 // Parse all default Todo's from db
 const DB = firstTodos.map(t => {
   // Form new Todo objects
-  return new Todo((title = t.title));
+  return new Todo(t.title);
 });
 
 server.on("connection", client => {
@@ -28,7 +28,7 @@ server.on("connection", client => {
     // Push this newly created todo to our database
     DB.push(newTodo);
 
-    // Send the latest todo(s) to the client
+    // Send the latest todo item to the client
     addTodo(t);
   });
 

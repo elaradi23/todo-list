@@ -1,0 +1,14 @@
+body {
+  color: #2e2e2e;
+  background-color: #caebf2;
+}
+
+h1 {
+  margin: 0;
+  padding: 20px 0px;
+  text-align: center;
+}
+
+input {
+  padding: 20px 0px;
+}

@@ -5,16 +5,29 @@
         <title>TODO</title>
         <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
         <script src="todolist.js" async></script>
+        <link rel="stylesheet" href="style.css"></link>
     </head>
     <body>
-        <input id="todo-input" type="text" placeholder="Feed the cat" autofocus>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+        <h1 id="title" style="text-align: center;">Todo!</h2>
+        <input class="form-control add-todo" id="todo-input" type="text" placeholder="Feed the cat" autofocus>
         <button type="button" onclick="add()">Make</button>
         <!-- vue instance -->
         <div id="app">
           <!-- todolist vue component -->
           <todolist :todolist="todolist"></todolist>
         </div>
+      </div>
+      <div class="col-sm-3"></div>
+
+      </div>
+      </div>
     </body>
     <script src="client.js" async></script>
 </html>

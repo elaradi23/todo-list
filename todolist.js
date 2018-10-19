@@ -1,11 +1,11 @@
 // Todolist component with props passed
 Vue.component("todolist", {
-  template: `<div>
-    <ul>
+  template: `<div class>
+    <ul class="list-group">
       <todolist-item @remove="remove(i)" @complete="complete(i)" v-for="(item, i) in todolist" :item="item"></todolist-item>
     </ul>
-    <button v-on:click="completeAll">Complete All Todos</button>
-    <button v-on:click="removeAll">Delete All Todos</button>
+    <button class="btn btn-primary btn-lg btn-block" v-on:click="completeAll">Complete All Todos</button>
+    <button class="btn btn-primary btn-lg btn-block" v-on:click="removeAll">Delete All Todos</button>
   <div>`,
   props: ["todolist"],
   methods: {
@@ -43,10 +43,13 @@ Vue.component("todolist", {
 
 // Todolist item component with props passed
 Vue.component("todolist-item", {
-  template: `<li>
-    <p>{{ item.title }}</p>
+  template: `<li class="list-group-item">
+  <div class="container-fluid">
     <input @click="requestComplete" type="checkbox" v-model="item.completed">
-    <button @click="requestDelete">Delete</button>
+    <label v-if="item.completed" v-else :style="{ 'text-decoration': 'line-through' }">{{ item.title }}</label>
+    <label v-else>{{ item.title }}</label>
+    <button class="btn btn-outline-secondary" @click="requestDelete">Delete</button>
+</div>
   </li>`,
   props: ["item"],
   methods: {

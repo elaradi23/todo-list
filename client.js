@@ -47,3 +47,9 @@ server.on("newTodo", todo => {
 server.on("complete", i => {
   this.vm.todolist[i].completed = true;
 });
+
+// This event is for deleting a todo item
+server.on("delete", i => {
+  console.log('server delete ' + i)
+  this.vm.todolist.splice(i, 1);
+});

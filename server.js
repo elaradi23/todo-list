@@ -38,6 +38,12 @@ server.on("connection", client => {
     server.emit("complete", i);
   });
 
+  // Deletes a todo item
+  client.on("delete", i => {
+    DB.splice(i, 1);
+    server.emit("delete", i);
+  });
+
   // Send the DB downstream on connect
   reloadTodos();
 });

@@ -3,13 +3,16 @@ Vue.component("todolist", {
   template:
   `<div>
     <ul>
-      <todolist-item @complete="complete(i)" v-for="(item, i) in todolist" :item="item"></todolist-item>
+      <todolist-item @remove="remove(i)" @complete="complete(i)" v-for="(item, i) in todolist" :item="item"></todolist-item>
     </ul>
   <div>`,
   props: ["todolist"],
   methods: {
     complete: function(i) {
       server.emit("complete", i);
+    },
+    remove: function(i) {
+      server.emit("delete", i);
     }
   }
 });
@@ -17,14 +20,19 @@ Vue.component("todolist", {
 // Todolist item component with props passed
 Vue.component("todolist-item", {
   template:
-`  <li>
+  `<li>
     <p>{{ item.title }}</p>
-    <input @click='requestComplete' type='checkbox' v-model='item.completed'>
+    <input @click="requestComplete" type="checkbox" v-model="item.completed">
+    <button @click="requestDelete">Delete</button>
   </li>`,
   props: ["item"],
   methods: {
     requestComplete: function() {
       this.$emit("complete");
+    },
+    requestDelete: function() {
+      console.log("d1");
+      this.$emit("remove");
     }
   }
 });

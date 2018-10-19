@@ -1,10 +1,21 @@
 const server = io("http://localhost:3003/");
+let connected = false;
 
 // Vue instance
 var vm = new Vue({
   el: "#app",
   data: {
     todolist: []
+  },
+  watch: {
+    todolist(values) {
+      localStorage.todolist = JSON.stringify(values);
+    }
+  },
+  methods: {
+    persist() {
+      localStorage.todolist = JSON.stringify(this.todolist);
+    }
   }
 });
 
@@ -35,23 +46,34 @@ function add() {
 server.on("load", todos => {
   // Ensures reset of todo list on client connections already viewing the app
   // instead of appending the rendred todos to existing todos on the app page
-  this.vm.todolist = [];
-  todos.forEach(todo => this.vm.todolist.push(todo));
+  if (localStorage.getItem("todolist") == "[]") {
+    console.log("local storage");
+    this.vm.todolist = [];
+    todos.forEach(todo => this.vm.todolist.push(todo));
+  } else {
+    console.log("server");
+    this.vm.todolist = JSON.parse(localStorage.todolist);
+    console.log(localStorage.getItem("todolist"));
+    server.emit("syncDB", this.vm.todolist);
+  }
 });
 
 // This event is for loading the lastest todo item to todos list
 server.on("newTodo", todo => {
   this.vm.todolist.push(todo);
+  this.vm.persist();
 });
 
 // This event is for updating a todo when completed
 server.on("complete", i => {
   this.vm.todolist[i].completed = true;
+  this.vm.persist();
 });
 
 // This event is for deleting a todo item
 server.on("delete", i => {
   this.vm.todolist.splice(i, 1);
+  this.vm.persist();
 });
 
 // This event assigns all todos as completed
@@ -59,9 +81,18 @@ server.on("completeAll", () => {
   this.vm.todolist.forEach(function(todo) {
     todo.completed = true;
   });
+  this.vm.persist();
 });
 
 // This event deletes all todos
 server.on("deleteAll", () => {
   this.vm.todolist = [];
+  this.vm.persist();
+});
+
+// This event will reserve todos in local storage in case of lost connection
+server.on("connect_error", () => {
+  var ls = localStorage.getItem("todolist");
+  this.vm.todolist = JSON.parse(ls);
+  console.log("disconnect");
 });

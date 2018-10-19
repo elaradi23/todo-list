@@ -4,7 +4,7 @@ const Todo = require("./todo");
 
 // This is going to be our fake 'database' for this application
 // Parse all default Todo's from db
-const DB = firstTodos.map(t => {
+var DB = firstTodos.map(t => {
   // Form new Todo objects
   return new Todo(t.title);
 });
@@ -56,6 +56,12 @@ server.on("connection", client => {
   client.on("deleteAll", () => {
     DB.length = 0;
     server.emit("deleteAll");
+  });
+
+  // Deletes all todo items
+  client.on("syncDB", todos => {
+    DB = todos;
+    console.log("Syncing..", DB);
   });
 
   // Send the DB downstream on connect

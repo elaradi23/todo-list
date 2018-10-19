@@ -7,13 +7,17 @@ function add() {
   console.warn(event);
   const input = document.getElementById("todo-input");
 
-  // Emit the new todo as some data to the server
-  server.emit("make", {
-    title: input.value
-  });
+  // Prevent whitespace input as a todo item
+  if (input.value) {
+    // Emit the new todo as some data to the server
+    server.emit("make", {
+      title: input.value
+    });
 
-  // Clear the input
-  input.value = "";
+    // Clear the input
+    input.value = "";
+  }
+
   // Refocus the element
   input.focus();
 }

@@ -4,20 +4,17 @@ const server = io("http://localhost:3003/");
 var vm = new Vue({
   el: "#app",
   data: {
-    todolist: []
+    todolist: [],
+    completed: 0
   },
   watch: {
     todolist(values) {
       localStorage.todolist = JSON.stringify(values);
+      // calcualtes % of tasks completed
       this.completed =
         (this.todolist.filter(t => t.completed == true).length /
           this.todolist.length) *
         100;
-    }
-  },
-  methods: {
-    persist() {
-      localStorage.todolist = JSON.stringify(this.todolist);
     }
   }
 });
@@ -64,19 +61,16 @@ server.on("load", todos => {
 // This event is for loading the lastest todo item to todos list
 server.on("newTodo", todo => {
   this.vm.todolist.push(todo);
-  this.vm.persist();
 });
 
 // This event is for updating a todo when completed
 server.on("complete", i => {
   this.vm.todolist[i].completed = true;
-  this.vm.persist();
 });
 
 // This event is for deleting a todo item
 server.on("delete", i => {
   this.vm.todolist.splice(i, 1);
-  this.vm.persist();
 });
 
 // This event assigns all todos as completed
@@ -84,13 +78,11 @@ server.on("completeAll", () => {
   this.vm.todolist.forEach(function(todo) {
     todo.completed = true;
   });
-  this.vm.persist();
 });
 
 // This event deletes all todos
 server.on("deleteAll", () => {
   this.vm.todolist = [];
-  this.vm.persist();
 });
 
 // This event will reserve todos in local storage in case of lost connection

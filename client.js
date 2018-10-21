@@ -1,5 +1,4 @@
 const server = io("http://localhost:3003/");
-let connected = false;
 
 // Vue instance
 var vm = new Vue({
@@ -10,6 +9,10 @@ var vm = new Vue({
   watch: {
     todolist(values) {
       localStorage.todolist = JSON.stringify(values);
+      this.completed =
+        (this.todolist.filter(t => t.completed == true).length /
+          this.todolist.length) *
+        100;
     }
   },
   methods: {
@@ -46,14 +49,14 @@ function add() {
 server.on("load", todos => {
   // Ensures reset of todo list on client connections already viewing the app
   // instead of appending the rendred todos to existing todos on the app page
-  if (localStorage.getItem("todolist") == "[]") {
-    console.log("local storage");
-    this.vm.todolist = [];
+  // Ensures syncing of todo list on client app and server DB
+  if (
+    localStorage.getItem("todolist") == "null" ||
+    localStorage.getItem("todolist") == null
+  ) {
     todos.forEach(todo => this.vm.todolist.push(todo));
   } else {
-    console.log("server");
     this.vm.todolist = JSON.parse(localStorage.todolist);
-    console.log(localStorage.getItem("todolist"));
     server.emit("syncDB", this.vm.todolist);
   }
 });
@@ -94,5 +97,4 @@ server.on("deleteAll", () => {
 server.on("connect_error", () => {
   var ls = localStorage.getItem("todolist");
   this.vm.todolist = JSON.parse(ls);
-  console.log("disconnect");
 });

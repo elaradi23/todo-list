@@ -9,12 +9,7 @@ var vm = new Vue({
   },
   watch: {
     todolist(values) {
-      localStorage.todolist = JSON.stringify(values);
-      // calcualtes % of tasks completed
-      this.completed =
-        (this.todolist.filter(t => t.completed == true).length /
-          this.todolist.length) *
-        100;
+      update();
     }
   }
 });
@@ -41,11 +36,15 @@ function add() {
   input.focus();
 }
 
+// This function updates local storage and calculates the completed % of our todos
+function update() {
+  localStorage.todolist = JSON.stringify(this.vm.todolist);
+  this.vm.completed = (this.vm.todolist.filter(t => t.completed == true).length / this.vm.todolist.length) * 100;
+}
+
 // NOTE: These are listeners for events from the server
 // This event is for (re)loading the entire list of todos from the server
 server.on("load", todos => {
-  // Ensures reset of todo list on client connections already viewing the app
-  // instead of appending the rendred todos to existing todos on the app page
   // Ensures syncing of todo list on client app and server DB
   if (
     localStorage.getItem("todolist") == "null" ||
@@ -66,6 +65,7 @@ server.on("newTodo", todo => {
 // This event is for updating a todo when completed
 server.on("complete", i => {
   this.vm.todolist[i].completed = true;
+  update();
 });
 
 // This event is for deleting a todo item
@@ -78,11 +78,13 @@ server.on("completeAll", () => {
   this.vm.todolist.forEach(function(todo) {
     todo.completed = true;
   });
+  update();
 });
 
 // This event deletes all todos
 server.on("deleteAll", () => {
   this.vm.todolist = [];
+  update();
 });
 
 // This event will reserve todos in local storage in case of lost connection

@@ -61,6 +61,7 @@ Vue.component("todolist-item", {
   template:
   `<li class="list-group-item">
     <div v-if="item.completed" class="todo-item">
+    <input @click="requestComplete" type="checkbox" v-model="item.completed"">
       <label class="completed">{{ item.title }} &nbsp<i v-bind:class="getClass(item.title)"></label>
       <button class="btn btn-outline-secondary float-right" @click="requestDelete">Delete</button>
     </div>
